@@ -27,6 +27,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var input1: UITextField!
     @IBOutlet weak var submit: UIButton!
     
+    @IBOutlet weak var img: UIImageView!
     
     // === View가 로딩되었을때 자동으로 호출되는 함수 ===
     override func viewDidLoad() {
@@ -42,7 +43,7 @@ class ViewController: UIViewController {
         btns = [btn1,btn2,btn3]
         for (index, btn) in btns.enumerated() {
             // btn.backgroundColor = UIColor(red:1, green:0, blue: 0, alpha: 1)
-            btn.backgroundColor = UIColor.gray
+            btn.backgroundColor = UIColor.lightGray
             btn.setTitleColor(UIColor.black, for: .normal)
             btn.setTitleColor(UIColor.white, for: .highlighted)
             btn.setTitle("버튼\(index+1)", for: .normal)
@@ -51,9 +52,21 @@ class ViewController: UIViewController {
         
         // 3. 입력창
         input1.placeholder = "변경할 제목을 입력하세요"
+        input1.backgroundColor = UIColor.white
         submit.setTitle("입력하기", for: .normal)
+        submit.backgroundColor = UIColor.lightGray
+        submit.setTitleColor(UIColor.black, for: .normal)
+        submit.setTitleColor(UIColor.white, for: .highlighted)
         submit.addTarget(self, action: #selector(onSubmit(_:)), for: .touchDown)
-
+        
+        // 4. 이미지
+        img.image = UIImage(named: "swift")
+        img.tag = 1
+        img.isUserInteractionEnabled = true // 이미지 상호작용 활성화
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(onChange(_:))) // 탭 제스처 인식기 생성
+        img.addGestureRecognizer(gesture) // 탭 제스처 인식기 추가
+        
+        
     }
 
     // === action function 작성하는 부분 ===
@@ -68,9 +81,30 @@ class ViewController: UIViewController {
     
     // 입력함수 콜백함수
     @IBAction func onSubmit(_ sender: UIButton) {
-        let inputValue = input1.text
-        labelTitle.text = inputValue
-        print("submit 완료")
+        
+        if let inputValue = input1.text, !inputValue.isEmpty {
+            labelTitle.text = inputValue
+            print("submit 완료")
+        } else {
+            print("내용을 입력해주세요")
+        }
+        
+    }
+    
+    // 이미지 교체함수
+    @IBAction func onChange(_ sender: UIImageView){
+        print("이미지교체")
+        let img = sender
+        switch img.tag {
+        case 1:
+            img.image = UIImage(named: "apple")
+            img.tag = 2
+        case 2:
+            img.image = UIImage(named: "swift")
+            img.tag = 1
+        default:
+            break
+        }
     }
     
 }
